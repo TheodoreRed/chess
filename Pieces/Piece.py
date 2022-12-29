@@ -11,5 +11,8 @@ class Piece:
         self.team = team
         self.position = position
 
+    def __repr__(self):
+        return "R"
 
-piece = Piece(Team.WHITE, (0, 0))
+
+print(Piece(Team.WHITE, (0, 0)))
