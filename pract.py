@@ -14,5 +14,5 @@ def get_numbers_between(start, end):
     return numbers
 
 
-print(get_numbers_between(1, 5))
-print(get_numbers_between(5, 1))
+for x in range(2 + 1, 7):
+    print(x)

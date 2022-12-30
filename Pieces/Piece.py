@@ -12,7 +12,11 @@ class Piece:
         self.position = position
 
     def __repr__(self):
-        return "R"
+        if self.team == Team.BLACK:
+            temp = " BL"
+        else:
+            temp = " WH"
+        return "R" + temp
 
 
 # print(Piece(Team.WHITE, (0, 0)))
