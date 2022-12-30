@@ -3,16 +3,13 @@ import os
 os.system("cls")
 
 
-def get_numbers_between(start, end):
+def get_numbers_between(num1, num2):
+    start = min(num1, num2) + 1
+    end = max(num1, num2)
     numbers = []
-    if start < end:
-        for i in range(start + 1, end):
-            numbers.append(i)
-    else:
-        for i in range(end + 1, start):
-            numbers.append(i)
+    for i in range(start, end):
+        numbers.append(i)
     return numbers
 
 
-for x in range(2 + 1, 7):
-    print(x)
+print(get_numbers_between(6, 2))

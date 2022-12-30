@@ -1,5 +1,9 @@
 from Pieces.Piece import Team
 from Pieces.Rook import Rook
+import os
+
+os.system("cls")
+
 
 BOARD_SIZE = 8
 
@@ -37,12 +41,14 @@ class Board:
 
 board = Board()
 board.display()
-board.move((1, 0), (3, 0))
+board.move((1, 0), (5, 0))
 board.display()
-board.move((3, 0), (2, 0))
+board.move((5, 0), (2, 0))
 board.display()
-board.move((2, 0), (5, 0))
+board.move((2, 0), (4, 0))
 board.display()
-board.move((5, 0), (7, 0))
+board.move((4, 0), (5, 0))
+board.display()
+board.move((5, 0), (6, 0))
 board.display()
 print("----------------------")

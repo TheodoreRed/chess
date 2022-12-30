@@ -11,40 +11,33 @@ class Rook(Piece):
     # TODO: Check legality,
     def move(self, board, new_pos):
         # checks if new_pos in same row or column
-        # horizontal move
-        if new_pos[0] == self.position[0]:
-            return True
-        # vertical move
-        elif new_pos[1] == self.position[1]:
-            VERTICAL = new_pos[1]
+        if new_pos[0] == self.position[0] or new_pos[1] == self.position[1]:
 
-            # new position is increasing
-            if self.position[0] < new_pos[0]:
-                print("Increasing vertical")
-                for i in range((self.position[0] + 1), (new_pos[0] + 1)):
-                    print(i)
-                    # checks if there is a piece
-                    if board[i][VERTICAL] != None:
-                        if board[i][VERTICAL].team != self.team:
-                            print("XXXXxxxXX")
-                            self.position = (new_pos[0] - 1, new_pos[1])
-                            return True
-                        return False
-                self.position = new_pos
-                return True
-            # new position decreasing
-            else:
-                print("Decreasing")
-                """
-                for i in range(new_pos[0], self.position[0] + 1):
-                    if board[i][VERTICAL] != None:
-                        # spot not empty
-                        print("Can't move there!")
-                        return False
-                """
-                return True
+            # checks if new position is changing vertically
+            if new_pos[1] == self.position[1]:
+
+                # increasing
+                if new_pos[0] > self.position[0]:
+                    for i in range(self.position[0] + 1, new_pos[0] + 1):
+                        if board[i][new_pos[1]] != None:
+                            if board[i][new_pos[1]].team is not self.team:
+                                if i != new_pos[0]:
+                                    print(i, new_pos[1])
+                                    print("Piece in the way")
+                                    return False
+                                self.position = new_pos
+                                return True
+                            return False
+                    self.position = new_pos
+                    return True
+
+                # decreasing
+                else:
+                    self.position = new_pos
+                    return True
         else:
+            print("Not same row or column")
             return False
 
     def __str__(self):
-        return "R" + self.team
+        return "R" + str(self.team)
