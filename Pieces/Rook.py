@@ -8,7 +8,6 @@ class Rook(Piece):
     def __init__(self, team, position):
         Piece.__init__(self, team, position)
 
-    # TODO: Check legality,
     def move(self, board, new_pos):
         # checks if new_pos in same row or column
         if new_pos[0] == self.position[0] or new_pos[1] == self.position[1]:
@@ -20,15 +19,14 @@ class Rook(Piece):
                 if new_pos[0] > self.position[0]:
                     for i in range(self.position[0] + 1, new_pos[0] + 1):
                         if board[i][new_pos[1]] != None:
-                            if board[i][new_pos[1]].team is not self.team:
-                                if i != new_pos[0]:
-                                    print(i, new_pos[1])
-                                    print("Piece in the way")
-                                    return False
-                                self.position = new_pos
-                                return True
-                            print("Same team!")
-                            return False
+                            if board[i][new_pos[1]].team is self.team:
+                                print("Same team!")
+                                return False
+                            if i != new_pos[0]:
+                                print("Piece in the way")
+                                return False
+                            self.position = new_pos
+                            return True
                     self.position = new_pos
                     return True
 
@@ -79,5 +77,7 @@ class Rook(Piece):
             print("Not same row or column")
             return False
 
-    def __str__(self):
-        return "R" + str(self.team)
+    def __repr__(self):
+        team = "Black" if str(self.team).__contains__("BLACK") else "White"
+
+        return "R " + team
