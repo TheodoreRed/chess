@@ -13,9 +13,9 @@ class Piece:
 
     def __repr__(self):
         if self.team == Team.BLACK:
-            temp = " BL"
+            temp = " BLACK"
         else:
-            temp = " WH"
+            temp = " WHITE"
         return "R" + temp
 
 

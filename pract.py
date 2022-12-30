@@ -12,4 +12,5 @@ def get_numbers_between(num1, num2):
     return numbers
 
 
-print(get_numbers_between(6, 2))
+for i in range(7, 4, -1):
+    print(i)
