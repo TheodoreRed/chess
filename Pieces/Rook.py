@@ -20,7 +20,7 @@ class Rook(Piece):
             vertical = new_pos[1]
             # vertical move
             if self.position[0] < new_pos[0]:
-                for i in range(self.position[0] + 1, new_pos[0]):
+                for i in range(self.position[0] + 1, new_pos[0] + 1):
                     if board[i][vertical] != None:
                         # spot not empty
                         print("Can't move there!")
