@@ -15,4 +15,4 @@ class Piece:
         return "R"
 
 
-print(Piece(Team.WHITE, (0, 0)))
+# print(Piece(Team.WHITE, (0, 0)))

@@ -1,27 +1,18 @@
 import os
 
 os.system("cls")
-BOARD_SIZE = 8
-"""
-board = [
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 2, 2, 2, 2, 2, 2, 2],
-    [3, 3, 3, 3, 3, 3, 3, 3],
-    [4, 4, 4, 4, 4, 4, 4, 4],
-    [5, 5, 5, 5, 5, 5, 5, 5],
-    [6, 6, 6, 6, 6, 6, 6, 6],
-    [7, 7, 7, 7, 7, 7, 7, 7],
-]"""
-board = {"a": {}, "b": {}, "c": {}, "d": {}, "e": {}, "f": {}, "g": {}}
-for row in board:
-    row = {"1": None, "2": None}
 
 
-def display(board):
-    for row in board:
-        for col in row:
-            print(board[row][col])
+def get_numbers_between(start, end):
+    numbers = []
+    if start < end:
+        for i in range(start + 1, end):
+            numbers.append(i)
+    else:
+        for i in range(end + 1, start):
+            numbers.append(i)
+    return numbers
 
 
-display(board)
+print(get_numbers_between(1, 5))
+print(get_numbers_between(5, 1))
