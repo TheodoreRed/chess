@@ -1,6 +1,7 @@
 from Pieces.Piece import Team
 from Pieces.Rook import Rook
 from Pieces.Bishop import Bishop
+from Pieces.Pawn import Pawn
 import os
 
 os.system("cls")
@@ -20,7 +21,7 @@ class Board:
             for j in range(BOARD_SIZE):
                 if i in {0, 1, 6, 7}:
                     team = Team.WHITE if i in {0, 1} else Team.BLACK
-                    row.append(Bishop(team, (i, j)))
+                    row.append(Pawn(team, (i, j)))
                 else:
                     row.append(None)
             self.board.append(row)
