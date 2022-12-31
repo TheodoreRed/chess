@@ -7,9 +7,8 @@ class Team(Enum):
 
 
 class Piece:
-    def __init__(self, team, position):
+    def __init__(self, team):
         self.team = team
-        self.position = position
 
     def __repr__(self):
         return "Piece"

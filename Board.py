@@ -21,7 +21,7 @@ class Board:
             for j in range(BOARD_SIZE):
                 if i in {0, 1, 6, 7}:
                     team = Team.WHITE if i in {0, 1} else Team.BLACK
-                    row.append(Rook(team, (i, j)))
+                    row.append(Rook(team))
                 else:
                     row.append(None)
             self.board.append(row)
@@ -34,7 +34,7 @@ class Board:
     def move(self, current_pos, new_pos):
         piece = self.board[current_pos[0]][current_pos[1]]
         if piece:
-            if piece.move(self.board, new_pos):
+            if piece.move(self.board, current_pos, new_pos):
                 self.board[current_pos[0]][current_pos[1]] = None
                 self.board[new_pos[0]][new_pos[1]] = piece
         else:
@@ -44,6 +44,6 @@ class Board:
 board = Board()
 board.display()
 
-board.move((6, 6), (5, 6))
+board.move((6, 6), (1, 6))
 board.display()
 print("----------------------")
