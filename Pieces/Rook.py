@@ -9,73 +9,43 @@ class Rook(Piece):
         Piece.__init__(self, team, position)
 
     def move(self, board, new_pos):
-        # checks if new_pos in same row or column
-        if new_pos[0] == self.position[0] or new_pos[1] == self.position[1]:
+        # Vertical Change
+        if new_pos[1] == self.position[1]:
 
-            # checks if new position is changing vertically
-            if new_pos[1] == self.position[1]:
-
-                # increasing
-                if new_pos[0] > self.position[0]:
-                    for i in range(self.position[0] + 1, new_pos[0] + 1):
-                        if board[i][new_pos[1]] != None:
-                            if board[i][new_pos[1]].team is self.team:
-                                print("Same team!")
-                                return False
-                            if i != new_pos[0]:
-                                print("Piece in the way")
-                                return False
-                            self.position = new_pos
-                            return True
+            # Up or Down
+            route = 1 if new_pos[0] > self.position[0] else -1
+            for i in range(self.position[0] + route, new_pos[0] + route, route):
+                if board[i][new_pos[1]] != None:
+                    if board[i][new_pos[1]].team is self.team:
+                        print("Same team!")
+                        print(route)
+                        return False
+                    if i != new_pos[0]:
+                        print("Piece in the way")
+                        return False
                     self.position = new_pos
                     return True
+            self.position = new_pos
+            return True
 
-                # decreasing
-                else:
-                    for i in range(self.position[0] - 1, new_pos[0] - 1, -1):
-                        if board[i][new_pos[1]] != None:
-                            if board[i][new_pos[1]].team is self.team:
-                                print("Same Team!")
-                                return False
-                            else:
-                                if i != new_pos[0]:
-                                    print("Piece in the way")
-                                    return False
-                    self.position = new_pos
-                    return True
-            # checks if new position is changing horizontally
-            else:
-                if new_pos[0] == self.position[0]:
-                    # increasing
-                    if new_pos[1] > self.position[1]:
-                        for i in range(self.position[1] + 1, new_pos[1] + 1):
-                            if board[new_pos[0]][i] != None:
-                                if board[new_pos[0]][i].team is self.team:
-                                    print("Same Team!")
-                                    return False
-                                else:
-                                    if i != new_pos[1]:
-                                        print("Piece in the way")
-                                        return False
-                        self.position = new_pos
-                        return True
-                    # decreasing
+        # Horizontal Change
+        if new_pos[0] == self.position[0]:
+            # Up or Down
+            route = 1 if new_pos[1] > self.position[1] else -1
+            for i in range(self.position[1] + route, new_pos[1] + route, route):
+                if board[new_pos[0]][i] != None:
+                    if board[new_pos[0]][i].team is self.team:
+                        print("Same Team!")
+                        return False
                     else:
-                        for i in range(self.position[1] - 1, new_pos[1] - 1, -1):
-                            if board[new_pos[0]][i] != None:
-                                if board[new_pos[0]][i].team is self.team:
-                                    print("Same Team!")
-                                    return False
-                                else:
-                                    if i != new_pos[1]:
-                                        print("Piece in the way")
-                                        return False
-                        self.position = new_pos
-                        return True
+                        if i != new_pos[1]:
+                            print("Piece in the way")
+                            return False
+            self.position = new_pos
+            return True
 
-        else:
-            print("Not same row or column")
-            return False
+        print("Not same row or column")
+        return False
 
     def __repr__(self):
         team = "Black" if str(self.team).__contains__("BLACK") else "White"

@@ -21,7 +21,7 @@ class Board:
             for j in range(BOARD_SIZE):
                 if i in {0, 1, 6, 7}:
                     team = Team.WHITE if i in {0, 1} else Team.BLACK
-                    row.append(Pawn(team, (i, j)))
+                    row.append(Rook(team, (i, j)))
                 else:
                     row.append(None)
             self.board.append(row)
@@ -44,4 +44,6 @@ class Board:
 board = Board()
 board.display()
 
+board.move((6, 6), (5, 6))
+board.display()
 print("----------------------")
