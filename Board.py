@@ -46,5 +46,12 @@ board.display()
 
 board.move((6, 0), (3, 3))
 board.display()
-
+board.move((1, 1), (3, 3))
+board.display()
+board.move((0, 0), (3, 3))
+board.display()
+board.move((6, 6), (3, 3))
+board.display()
+board.move((7, 7), (3, 3))
+board.display()
 print("----------------------")

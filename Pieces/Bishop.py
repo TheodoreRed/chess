@@ -14,6 +14,21 @@ class Bishop(Piece):
         current_row = current_pos[0]
         current_col = current_pos[1]
         if abs(new_row - current_row) == abs(new_col - current_col):
+
+            row_route = 1 if new_row > current_row else -1
+            col_route = 1 if new_col > current_col else -1
+            for i in range(abs(new_row - current_row)):
+                if board[current_row + row_route][current_col + col_route] != None:
+                    if (
+                        board[current_row + row_route][current_col + col_route].team
+                        == self.team
+                    ):
+                        print("Same Team!")
+                        return False
+                    else:
+                        return True
+                current_row += row_route
+                current_col += col_route
             return True
         print("Not a diagonal")
         return False
