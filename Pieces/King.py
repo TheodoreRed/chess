@@ -40,9 +40,9 @@ class King(Piece):
         # Attacking
         if board[new_row][new_col] != None:
             if board[new_row][new_col].team == self.team:
-                print("Same tean")
+                print("Same team")
                 return False
         return True
 
     def __repr__(self):
-        return "K " + str(self.team)
+        return "King " + str(self.team)
