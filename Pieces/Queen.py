@@ -1,14 +1,21 @@
 try:
-    from Pieces.Piece import Piece
+    from Pieces.Piece import *
 except:
-    from Piece import Piece
+    from Piece import *
 
 
 class Queen(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
+        self.rank = Rank.QUEEN
 
     def move(self, board, current_pos, new_pos):
+        """
+        TODO: Instead of copying this... could you just use the Rook and Bishop directly? Why not make new Rook/Bishop objects...
+        test them to see if *they* would move successfully then you know that the queen could as well.
+
+        Most importantly, you don't have to update this code everytime you update Rook/Bishop... D. R. Y. !!!
+        """
         new_row = new_pos[0]
         new_col = new_pos[1]
         current_row = current_pos[0]
@@ -66,6 +73,3 @@ class Queen(Piece):
             return True
         print("Can't move there!")
         return False
-
-    def __repr__(self):
-        return "Q " + str(self.team)

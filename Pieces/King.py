@@ -1,12 +1,14 @@
 try:
-    from Pieces.Piece import Piece
+    from Pieces.Piece import *
 except:
-    from Piece import Piece
+    from Piece import *
 
 
 class King(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
+        self.rank = Rank.KING
+        
         self.first_move = True
 
     def move(self, board, current_pos, new_pos):
@@ -19,6 +21,11 @@ class King(Piece):
         if abs(current_row - new_row) > 1 or abs(current_col - new_col) > 1:
             print("Can't move there!")
             return False
+
+        """
+        note: commenting this out for now. it'll be easiest to write this as "hey board... would a move to new_pos put me in check?"
+        which will include threats from the enemy king as well as any other piece. so don't worry about this until you're ready to work
+        on the end game logic of check/checkmate
 
         # Checks if new position will be near enemy king
         for i in range(3):
@@ -37,12 +44,11 @@ class King(Piece):
                         ) and board[test_row][test_col].team != self.team:
                             print("Can't move near enemy king")
                             return False
+        """
+    
         # Attacking
         if board[new_row][new_col] != None:
             if board[new_row][new_col].team == self.team:
                 print("Same team")
                 return False
         return True
-
-    def __repr__(self):
-        return "King " + str(self.team)

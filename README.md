@@ -4,6 +4,9 @@
 ## Technologies Used
 - Python
 
-
 ## Install and Run on Local Device
-To run the game, install the dependencies listed in `requirements.txt` and run the `Game.py` script.
+[comment]: <> (note: why explain with words when code do trick)
+```
+pip install -r requirements.txt
+python3 Game.py
+```
