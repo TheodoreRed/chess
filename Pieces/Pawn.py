@@ -1,7 +1,7 @@
 try:
-    from Pieces.Piece import Piece
+    from Pieces.Piece import Piece, Team
 except:
-    from Piece import Piece
+    from Piece import Piece, Team
 
 
 class Pawn(Piece):
@@ -23,18 +23,18 @@ class Pawn(Piece):
                     print("Piece in the way")
                     return False
                 self.first_move = False
-                return True
+                if new_row > current_row and self.team == Team.WHITE:
+                    return True
+                elif new_row < current_row and self.team == Team.BLACK:
+                    return True
         # trying to attack
-        if abs(current_row - new_row) == 1 and abs(current_col - new_col) == 1:
-            route = 1 if new_row > current_row else -1
-            if str(self.team) == "Team.WHITE":
-                if route != 1:
-                    return False
-            else:
-                if route != -1:
-                    return False
-
-            return True
+        elif abs(current_row - new_row) == 1 and abs(current_col - new_col) == 1:
+            if board[new_row][new_col] != None:
+                if board[new_row][new_col].team != self.team:
+                    if new_row > current_row and self.team == Team.WHITE:
+                        return True
+                    elif new_row < current_row and self.team == Team.BLACK:
+                        return True
 
         print("Can't move there!")
         return False

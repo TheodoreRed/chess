@@ -22,7 +22,6 @@ class Board:
         for i in range(BOARD_SIZE):
             row = []
             for j in range(BOARD_SIZE):
-                # pawn rows
                 if i in {1, 6}:
                     team = Team.WHITE if i == 1 else Team.BLACK
                     row.append(Pawn(team))
@@ -49,6 +48,19 @@ class Board:
         for row in reversed(range(len(self.board))):
             print(self.board[row])
 
+    # Gets every legal move given a spot on the board
+    # TODO: Prints error messages for move and turns
+    # off `first_move` for any piece that needs it
+    def get_all_legal_moves(self, position):
+        legal_moves = []
+        if self.board[position[0]][position[1]] != None:
+            piece = self.board[position[0]][position[1]]
+            for row in range(len(self.board)):
+                for col in range(len(self.board)):
+                    if piece.move(self.board, (position[0], position[1]), (row, col)):
+                        legal_moves.append((row, col))
+        return legal_moves
+
     def move(self, current_pos, new_pos):
         piece = self.board[current_pos[0]][current_pos[1]]
         if piece:
@@ -60,8 +72,9 @@ class Board:
 
 
 board = Board()
-
-
+board.move((1, 0), (3, 0))
 board.display()
-
+board.move((3, 0), (2, 0))
+board.display()
+print(board.get_all_legal_moves((3, 0)))
 print("----------------------")
