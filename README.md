@@ -8,5 +8,6 @@
 [comment]: <> (note: why explain with words when code do trick)
 ```
 pip install -r requirements.txt
+python3 test/test.py
 python3 Game.py
 ```
