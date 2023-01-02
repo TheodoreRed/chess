@@ -7,6 +7,7 @@ except:
 class Rook(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
+        self.first_move = True
 
     def move(self, board, current_pos, new_pos):
         new_row = new_pos[0]

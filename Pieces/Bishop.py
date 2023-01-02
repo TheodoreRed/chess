@@ -13,6 +13,8 @@ class Bishop(Piece):
         new_col = new_pos[1]
         current_row = current_pos[0]
         current_col = current_pos[1]
+
+        # Checks if new_pos is a diagonal
         if abs(new_row - current_row) == abs(new_col - current_col):
 
             row_route = 1 if new_row > current_row else -1
@@ -30,7 +32,7 @@ class Bishop(Piece):
                 current_row += row_route
                 current_col += col_route
             return True
-        print("Not a diagonal")
+        print("Can't move there!")
         return False
 
     def __repr__(self):

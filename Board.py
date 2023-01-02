@@ -30,8 +30,8 @@ class Board:
 
     def display(self):
         print("---------------------------")
-        for row in self.board:
-            print(row)
+        for row in reversed(range(len(self.board))):
+            print(self.board[row])
 
     def move(self, current_pos, new_pos):
         piece = self.board[current_pos[0]][current_pos[1]]
@@ -45,7 +45,9 @@ class Board:
 
 board = Board()
 
-board.move((6, 0), (4, 1))
+board.move((1, 0), (2, 1))
+board.display()
+board.move((0, 0), (1, 0))
 board.display()
 
 print("----------------------")

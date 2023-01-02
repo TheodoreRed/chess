@@ -37,7 +37,6 @@ class King(Piece):
                         ) and board[test_row][test_col].team != self.team:
                             print("Can't move near enemy king")
                             return False
-                    print(test_row, test_col)
         # Attacking
         if board[new_row][new_col] != None:
             if board[new_row][new_col].team == self.team:
