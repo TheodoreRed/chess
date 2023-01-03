@@ -6,6 +6,7 @@ class Team(Enum):
     BLACK = 2
     STALEMATE = 3
 
+
 class Rank(Enum):
     PAWN = 1
     KNIGHT = 2
@@ -18,12 +19,13 @@ class Rank(Enum):
 class Piece:
     def __init__(self, team):
         self.team = team
+        self.first_move = True
         # note: self.rank is assigned uniquely by each child class
 
     # note: good practice to keep the data members of a class hidden and only read/write to them via methods (i.e. getters/setters)
     def get_team(self):
         return self.team
-    
+
     def is_white_team(self):
         return self.team == Team.WHITE
 
@@ -36,9 +38,10 @@ class Piece:
     If we change this __eq__ dunder method to have a different definition of equality then we can say this instead:
     if two pieces have the same team and rank then they are equivalent
     """
+
     def __eq__(self, other):
         return other and self.team == other.team and self.rank == other.rank
-    
+
     def __repr__(self):
         # note: I like the format: Rook (W). What do you think? This is the new universal place to change __repr__ for any piece
-        return "{} ({})".format(self.rank.name, self.team.name[0])
+        return "\033[1;36;40m{} ({})\033[0m".format(self.rank.name, self.team.name[0])

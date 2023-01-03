@@ -8,8 +8,6 @@ class King(Piece):
     def __init__(self, team):
         Piece.__init__(self, team)
         self.rank = Rank.KING
-        
-        self.first_move = True
 
     def move(self, board, current_pos, new_pos):
         new_row = new_pos[0]
@@ -45,7 +43,7 @@ class King(Piece):
                             print("Can't move near enemy king")
                             return False
         """
-    
+
         # Attacking
         if board[new_row][new_col] != None:
             if board[new_row][new_col].team == self.team:

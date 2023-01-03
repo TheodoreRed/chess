@@ -13,14 +13,52 @@ os.system("cls")
 
 
 BOARD_SIZE = 8
-DEFAULT_BOARD = [[Rook(Team.WHITE), Knight(Team.WHITE), Bishop(Team.WHITE), Queen(Team.WHITE), King(Team.WHITE), Bishop(Team.WHITE), Knight(Team.WHITE), Rook(Team.WHITE)],
-                 [Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE)],
-                 [None, None, None, None, None, None, None, None],
-                 [None, None, None, None, None, None, None, None],
-                 [None, None, None, None, None, None, None, None],
-                 [None, None, None, None, None, None, None, None],
-                 [Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK)],
-                 [Rook(Team.BLACK), Knight(Team.BLACK), Bishop(Team.BLACK), Queen(Team.BLACK), King(Team.BLACK), Bishop(Team.BLACK), Knight(Team.BLACK), Rook(Team.BLACK)]]
+DEFAULT_BOARD = [
+    [
+        Rook(Team.WHITE),
+        Knight(Team.WHITE),
+        Bishop(Team.WHITE),
+        Queen(Team.WHITE),
+        King(Team.WHITE),
+        Bishop(Team.WHITE),
+        Knight(Team.WHITE),
+        Rook(Team.WHITE),
+    ],
+    [
+        Pawn(Team.WHITE),
+        Pawn(Team.WHITE),
+        Pawn(Team.WHITE),
+        Pawn(Team.WHITE),
+        Pawn(Team.WHITE),
+        Pawn(Team.WHITE),
+        Pawn(Team.WHITE),
+        Pawn(Team.WHITE),
+    ],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [None, None, None, None, None, None, None, None],
+    [
+        Pawn(Team.BLACK),
+        Pawn(Team.BLACK),
+        Pawn(Team.BLACK),
+        Pawn(Team.BLACK),
+        Pawn(Team.BLACK),
+        Pawn(Team.BLACK),
+        Pawn(Team.BLACK),
+        Pawn(Team.BLACK),
+    ],
+    [
+        Rook(Team.BLACK),
+        Knight(Team.BLACK),
+        Bishop(Team.BLACK),
+        Queen(Team.BLACK),
+        King(Team.BLACK),
+        Bishop(Team.BLACK),
+        Knight(Team.BLACK),
+        Rook(Team.BLACK),
+    ],
+]
 
 
 class Board:
@@ -35,10 +73,10 @@ class Board:
         print("---------------------------")
         for row in reversed(range(len(self.board))):
             print(self.board[row])
-    
+
     def get_board(self):
         return self.board
-    
+
     def get_piece(self, pos):
         piece = self.board[pos[0]][pos[1]]
         if piece:
@@ -74,18 +112,14 @@ class Board:
                 self.display()
 
                 return True
-    
+
     # TODO: return team of winner, or None if the game needs to continue
     def is_game_over(self):
         return None
 
 
-"""
 board = Board()
-board.move((1, 0), (3, 0))
-board.display()
-board.move((3, 0), (2, 0))
-board.display()
-print(board.get_all_legal_moves((3, 0)))
-print("----------------------")
-"""
+board.move((6, 3), (5, 3))
+board.move((7, 2), (5, 4))
+board.move((5, 4), (4, 3))
+board.move((4, 3), (5, 2))
