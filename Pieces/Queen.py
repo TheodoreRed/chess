@@ -11,6 +11,10 @@ class Queen(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.QUEEN
 
+    def get_legal_moves(self, board, position):
+        legal_moves = []
+        return legal_moves
+
     def move(self, board, current_pos, new_pos):
 
         """

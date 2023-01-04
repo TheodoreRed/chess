@@ -1,7 +1,7 @@
 import os
 from copy import deepcopy
 
-from Pieces.Piece import Team
+from Pieces.Piece import Team, Rank
 from Pieces.Rook import Rook
 from Pieces.Bishop import Bishop
 from Pieces.Pawn import Pawn
@@ -97,6 +97,28 @@ class Board:
                         legal_moves.append((row, col))
         return legal_moves
 
+    # check if a team is in check
+    def in_check(self, team):
+        king = None
+        for row in range(BOARD_SIZE):
+            for col in range(BOARD_SIZE):
+                if self.board[row][col] != None:
+                    piece = self.board[row][col]
+                    if piece.rank == Rank.KING and piece.team == team:
+                        king_row = row
+                        king_col = col
+                        king = piece
+                        break
+        # This will eventually be legal moves of a queen and Knight
+        rook = Rook(team)
+        potential_enemies = rook.get_legal_moves(self.board, (king_row, king_col))
+        enemies = []
+        for position in potential_enemies:
+            row, col = position[0], position[1]
+            print(row, col)
+            print(self.board[row][col])
+        return False
+
     def move(self, current_pos, new_pos):
         piece = self.get_piece(current_pos)
         if piece:
@@ -106,8 +128,9 @@ class Board:
             holding off on it for now
             """
             if piece.move(self.board, current_pos, new_pos):
-                self.board[current_pos[0]][current_pos[1]] = None
-                self.board[new_pos[0]][new_pos[1]] = piece
+                if self.in_check(piece.team) == False:
+                    self.board[current_pos[0]][current_pos[1]] = None
+                    self.board[new_pos[0]][new_pos[1]] = piece
 
                 self.display()
 
@@ -115,12 +138,22 @@ class Board:
 
     # TODO: return team of winner, or None if the game needs to continue
     def is_game_over(self):
+        # if self.in_check(Team.WHITE) and
+        # if self.can_not_move_piece_to_check_lane(Team.WHITE)
+        # if self.can_not_move_king(Team.WHITE)
         return None
 
 
 board = Board()
-board.move((1, 0), (3, 0))
-board.move((0, 0), (2, 0))
-board.move((2, 0), (2, 1))
-print(board.board[2][1])
-board.board[2][1].get_legal_moves(board.board, (2, 1))
+board.move((1, 4), (3, 4))
+board.move((6, 0), (4, 0))
+board.move((7, 0), (5, 0))
+board.move((5, 0), (5, 3))
+board.move((5, 3), (2, 3))
+board.move((2, 3), (2, 4))
+
+"""
+rook = board.board[2][1]
+print(rook)
+rook.get_legal_moves(board.board, (2, 1))
+"""
