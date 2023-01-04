@@ -49,15 +49,49 @@ def test_move_rook_bad_input():
     result_board = PAWNLESS_BOARD
 
     board = Board(starting_board)
+    print("---------Testing bad input---------")
     board.move((0, 0), (3, 1))
-
     assert board.get_board() == result_board
 
 
 def test_move_rook_forwards():
+
+    print("---------Testing same team piece in the way---------")
     # same team piece in the way
+    starting_board = PAWNLESS_BOARD
+    result_board = [
+        [
+            Rook(Team.WHITE),
+            Knight(Team.WHITE),
+            Bishop(Team.WHITE),
+            Queen(Team.WHITE),
+            King(Team.WHITE),
+            Bishop(Team.WHITE),
+            Knight(Team.WHITE),
+            Rook(Team.WHITE),
+        ],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [
+            Rook(Team.BLACK),
+            Knight(Team.BLACK),
+            Bishop(Team.BLACK),
+            Queen(Team.BLACK),
+            King(Team.BLACK),
+            Bishop(Team.BLACK),
+            Knight(Team.BLACK),
+            Rook(Team.BLACK),
+        ],
+    ]
+    board = Board(starting_board)
+    board.move((0, 0), (0, 0))
+    assert board.get_board() == result_board
 
-    # enemy team piece in the way
+    print("---------Testing enemy team piece in the way---------")
     starting_board = PAWNLESS_BOARD
     result_board = [
         [
@@ -90,9 +124,10 @@ def test_move_rook_forwards():
 
     board = Board(starting_board)
     board.move((0, 0), (3, 0))
-    board.move((7, 0), (2, 0))
+    board.move((7, 0), (1, 0))
     assert board.get_board() == result_board
-    # clear path
+
+    print("---------Testing clear path---------")
     starting_board = PAWNLESS_BOARD
     result_board = [
         [
@@ -126,8 +161,6 @@ def test_move_rook_forwards():
     board = Board(starting_board)
     board.move((0, 0), (3, 0))
     assert board.get_board() == result_board
-
-    pass
 
 
 def test_move_rook_backwards():
@@ -161,4 +194,5 @@ def test_rook():
 
 def test_board():
     # TODO: Add messages for 'x/y test cases passed', etc
+    print("---------Testing Rook---------")
     test_rook()

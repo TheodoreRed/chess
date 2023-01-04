@@ -118,8 +118,10 @@ class Board:
         return None
 
 
+"""
 board = Board()
 board.move((6, 3), (5, 3))
 board.move((7, 2), (5, 4))
 board.move((5, 4), (4, 3))
 board.move((4, 3), (5, 2))
+"""
