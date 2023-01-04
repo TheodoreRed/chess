@@ -117,6 +117,13 @@ class Board:
             row, col = position[0], position[1]
             print(row, col)
             print(self.board[row][col])
+            # checks if potential enemy has legal moves with kings position
+            if self.board[row][col]:
+                for pos in self.board[row][col].get_legal_moves(self.board, (row, col)):
+                    if self.board[pos[0]][pos[1]]:
+                        if self.board[pos[0]][pos[1]].rank == Rank.KING:
+                            print("In check")
+                            return True
         return False
 
     def move(self, current_pos, new_pos):
@@ -131,10 +138,11 @@ class Board:
                 if self.in_check(piece.team) == False:
                     self.board[current_pos[0]][current_pos[1]] = None
                     self.board[new_pos[0]][new_pos[1]] = piece
-
-                self.display()
-
-                return True
+                    self.display()
+                    return True
+            self.display()
+            print("In check")
+            return False
 
     # TODO: return team of winner, or None if the game needs to continue
     def is_game_over(self):
@@ -151,7 +159,7 @@ board.move((7, 0), (5, 0))
 board.move((5, 0), (5, 3))
 board.move((5, 3), (2, 3))
 board.move((2, 3), (2, 4))
-
+board.move((0, 3), (1, 4))
 """
 rook = board.board[2][1]
 print(rook)
