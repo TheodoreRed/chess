@@ -9,6 +9,47 @@ class Rook(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.ROOK
 
+    def get_legal_moves(self, board, position):
+        legal_moves = []
+        row, col = position[0], position[1]
+        move_left, move_right, move_up, move_down = True, True, True, True
+
+        for i in range(1, len(board) + 1):
+            if col - i >= 0:
+                if move_left:
+                    if board[row][col - i] == None:
+                        legal_moves.append((row, col - i))
+                    else:
+                        if board[row][col - i].team != self.team:
+                            legal_moves.append((row, col - i))
+                        move_left = False
+            if col + i <= 7:
+                if move_right:
+                    if board[row][col + i] == None:
+                        legal_moves.append((row, col + i))
+                    else:
+                        if board[row][col + i].team != self.team:
+                            legal_moves.append((row, col + i))
+                        move_right = False
+            if row + i <= 7:
+                if move_up:
+                    if board[row + i][col] == None:
+                        legal_moves.append((row + i, col))
+                    else:
+                        if board[row + i][col].team != self.team:
+                            legal_moves.append((row + i, col))
+                        move_up = False
+            if row - i >= 0:
+                if move_down:
+                    if board[row - i][col] == None:
+                        legal_moves.append((row - i, col))
+                    else:
+                        if board[row - i][col].team != self.team:
+                            legal_moves.append((row - i, col))
+                        move_down = False
+        print(legal_moves)
+        return legal_moves
+
     def move(self, board, current_pos, new_pos):
         new_row, new_col = new_pos[0], new_pos[1]
         current_row, current_col = current_pos[0], current_pos[1]

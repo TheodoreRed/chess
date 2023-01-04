@@ -118,10 +118,9 @@ class Board:
         return None
 
 
-"""
 board = Board()
-board.move((6, 3), (5, 3))
-board.move((7, 2), (5, 4))
-board.move((5, 4), (4, 3))
-board.move((4, 3), (5, 2))
-"""
+board.move((1, 0), (3, 0))
+board.move((0, 0), (2, 0))
+board.move((2, 0), (2, 1))
+print(board.board[2][1])
+board.board[2][1].get_legal_moves(board.board, (2, 1))
