@@ -43,5 +43,5 @@ class Piece:
         return other and self.team == other.team and self.rank == other.rank
 
     def __repr__(self):
-        # note: I like the format: Rook (W). What do you think? This is the new universal place to change __repr__ for any piece
+        # note: I like the format: Rook (W). What do you think? I like it and I made the pieces light blue to be easier to look at
         return "\033[1;36;40m{} ({})\033[0m".format(self.rank.name, self.team.name[0])

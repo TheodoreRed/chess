@@ -1,4 +1,5 @@
 import sys
+import pytest
 
 sys.path.append("./")
 
@@ -57,17 +58,70 @@ def test_move_rook_forwards():
     # same team piece in the way
 
     # enemy team piece in the way
+    starting_board = PAWNLESS_BOARD
+    result_board = [
+        [
+            None,
+            Knight(Team.WHITE),
+            Bishop(Team.WHITE),
+            Queen(Team.WHITE),
+            King(Team.WHITE),
+            Bishop(Team.WHITE),
+            Knight(Team.WHITE),
+            Rook(Team.WHITE),
+        ],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [Rook(Team.WHITE), None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [
+            Rook(Team.BLACK),
+            Knight(Team.BLACK),
+            Bishop(Team.BLACK),
+            Queen(Team.BLACK),
+            King(Team.BLACK),
+            Bishop(Team.BLACK),
+            Knight(Team.BLACK),
+            Rook(Team.BLACK),
+        ],
+    ]
 
+    board = Board(starting_board)
+    board.move((0, 0), (3, 0))
+    board.move((7, 0), (2, 0))
+    assert board.get_board() == result_board
     # clear path
     starting_board = PAWNLESS_BOARD
-    result_board = [[None, Knight(Team.WHITE), Bishop(Team.WHITE), Queen(Team.WHITE), King(Team.WHITE), Bishop(Team.WHITE), Knight(Team.WHITE), Rook(Team.WHITE)],
-                    [None, None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None, None],
-                    [Rook(Team.WHITE), None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None, None],
-                    [None, None, None, None, None, None, None, None],
-                    [Rook(Team.BLACK), Knight(Team.BLACK), Bishop(Team.BLACK), Queen(Team.BLACK), King(Team.BLACK), Bishop(Team.BLACK), Knight(Team.BLACK), Rook(Team.BLACK)]]
+    result_board = [
+        [
+            None,
+            Knight(Team.WHITE),
+            Bishop(Team.WHITE),
+            Queen(Team.WHITE),
+            King(Team.WHITE),
+            Bishop(Team.WHITE),
+            Knight(Team.WHITE),
+            Rook(Team.WHITE),
+        ],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [Rook(Team.WHITE), None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [
+            Rook(Team.BLACK),
+            Knight(Team.BLACK),
+            Bishop(Team.BLACK),
+            Queen(Team.BLACK),
+            King(Team.BLACK),
+            Bishop(Team.BLACK),
+            Knight(Team.BLACK),
+            Rook(Team.BLACK),
+        ],
+    ]
 
     board = Board(starting_board)
     board.move((0, 0), (3, 0))
@@ -100,9 +154,9 @@ def test_move_rook_right():
 def test_rook():
     test_move_rook_bad_input()
     test_move_rook_forwards()
-    test_move_rook_backwards()
-    test_move_rook_left()
-    test_move_rook_right()
+    # test_move_rook_backwards()
+    # test_move_rook_left()
+    # test_move_rook_right()
 
 
 def test_board():
