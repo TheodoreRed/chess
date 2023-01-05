@@ -193,8 +193,10 @@ board.move((5, 0), (5, 3))
 board.move((5, 3), (2, 3))
 board.move((2, 3), (2, 4))
 board.move((0, 3), (1, 4))
-board.move((1, 4), (2, 5))
-
+board.move((1, 1), (2, 1))
+board.move((1, 3), (2, 3))
+bishop = board.board[0][2]
+print(bishop.get_legal_moves(board.board, (0, 2)))
 """
 rook = board.board[2][1]
 print(rook)
