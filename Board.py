@@ -97,6 +97,7 @@ class Board:
                                 if self.in_check(piece.team) == False:
                                     self.board[row][col] = piece
                                     self.board[move[0]][move[1]] = None
+                                    # found a spot that would get out of check
                                     return True
                                 else:
                                     self.board[row][col] = piece
