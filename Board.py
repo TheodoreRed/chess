@@ -82,7 +82,7 @@ class Board:
         if piece:
             return piece
 
-    # trys all the legal moves on a team. if it finds one returns true
+    # trys all the legal moves on a team. if it finds one that stops check returns true
     def try_all_legal_moves(self, team):
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
@@ -95,7 +95,12 @@ class Board:
                                 self.board[row][col] = None
                                 self.board[move[0]][move[1]] = piece
                                 if self.in_check(piece.team) == False:
+                                    self.board[row][col] = piece
+                                    self.board[move[0]][move[1]] = None
                                     return True
+                                else:
+                                    self.board[row][col] = piece
+                                    self.board[move[0]][move[1]] = None
         return False
 
     def get_kings_position(self, team):
