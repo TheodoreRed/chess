@@ -47,7 +47,6 @@ class Rook(Piece):
                         if board[row - i][col].team != self.team:
                             legal_moves.append((row - i, col))
                         move_down = False
-        print(legal_moves)
         return legal_moves
 
     def move(self, board, current_pos, new_pos):

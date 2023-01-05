@@ -82,47 +82,46 @@ class Board:
         if piece:
             return piece
 
-    # Gets every legal move given a spot on the board
-    # TODO: Prints error messages for move and turns
-    # off `first_move` for any piece that needs it
+    # trys all the legal moves on a team. if it finds one returns true
+    def try_all_legal_moves(self, team):
+        for row in range(BOARD_SIZE):
+            for col in range(BOARD_SIZE):
+                if self.board[row][col] != None:
+                    piece = self.board[row][col]
+                    if piece.team == team:
+                        piece_moves = piece.get_legal_moves(self.board, (row, col))
+                        for move in piece_moves:
+                            if piece.move(self.board, (row, col), (move[0], move[1])):
+                                self.board[row][col] = None
+                                self.board[move[0]][move[1]] = piece
+                                if self.in_check(piece.team) == False:
+                                    return True
+        return False
 
-    # note: careful with how you use this method... it is extremely expensive (I'm sure you know that but still be cautious)
-    def get_all_legal_moves(self, position):
-        legal_moves = []
-        if self.board[position[0]][position[1]] != None:
-            piece = self.board[position[0]][position[1]]
-            for row in range(len(self.board)):
-                for col in range(len(self.board)):
-                    if piece.move(self.board, (position[0], position[1]), (row, col)):
-                        legal_moves.append((row, col))
-        return legal_moves
-
-    # check if a team is in check
-    def in_check(self, team):
-        king = None
+    def get_kings_position(self, team):
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
                 if self.board[row][col] != None:
                     piece = self.board[row][col]
                     if piece.rank == Rank.KING and piece.team == team:
-                        king_row = row
-                        king_col = col
-                        king = piece
-                        break
+                        return (row, col)
+
+    # check if a team is in check
+    def in_check(self, team):
+        king_pos = self.get_kings_position(team)
+        king_row = king_pos[0]
+        king_col = king_pos[1]
         # This will eventually be legal moves of a queen and Knight
         rook = Rook(team)
         potential_enemies = rook.get_legal_moves(self.board, (king_row, king_col))
-        enemies = []
         for position in potential_enemies:
             row, col = position[0], position[1]
-            print(row, col)
-            print(self.board[row][col])
             # checks if potential enemy has legal moves with kings position
             if self.board[row][col]:
                 for pos in self.board[row][col].get_legal_moves(self.board, (row, col)):
                     if self.board[pos[0]][pos[1]]:
                         if self.board[pos[0]][pos[1]].rank == Rank.KING:
-                            print("In check")
+                            # in check
                             return True
         return False
 
@@ -134,22 +133,51 @@ class Board:
             to have a reference to the board object instead of the board array in each piece. This will be a big re-factor, so I'm
             holding off on it for now
             """
-            if piece.move(self.board, current_pos, new_pos):
-                if self.in_check(piece.team) == False:
+            # Am I(piece) in check?
+            if self.in_check(piece.team):
+                # try a move to get out and see if piece's move is legal
+                if piece.move(self.board, current_pos, new_pos):
+                    # try to move it and see if my king is in check afterwards
                     self.board[current_pos[0]][current_pos[1]] = None
                     self.board[new_pos[0]][new_pos[1]] = piece
-                    self.display()
-                    return True
+                    if self.in_check(piece.team):
+                        # if I'm still in check after the switch, undo it return False
+                        self.board[current_pos[0]][current_pos[1]] = piece
+                        self.board[new_pos[0]][new_pos[1]] = None
+                        print("Still in check")
+                        self.display()
+                        return False
+            else:
+                print("Looks good! Not in check")
+                if piece.move(self.board, current_pos, new_pos):
+                    self.board[current_pos[0]][current_pos[1]] = None
+                    self.board[new_pos[0]][new_pos[1]] = piece
+                    if self.in_check(piece.team):
+                        self.board[current_pos[0]][current_pos[1]] = piece
+                        self.board[new_pos[0]][new_pos[1]] = None
+                        print("Can't move into check!")
+                        self.display()
+                        return False
+                    else:
+                        self.display()
+                        return True
             self.display()
-            print("In check")
             return False
 
     # TODO: return team of winner, or None if the game needs to continue
     def is_game_over(self):
-        # if self.in_check(Team.WHITE) and
-        # if self.can_not_move_piece_to_check_lane(Team.WHITE)
-        # if self.can_not_move_king(Team.WHITE)
-        return None
+        if self.in_check(Team.WHITE):
+            if self.try_all_legal_moves(Team.WHITE):
+                return None
+            else:
+                return Team.BLACK
+        elif self.in_check(Team.BLACK):
+            if self.try_all_legal_moves(Team.BLACK):
+                return None
+            else:
+                return Team.WHITE
+        else:
+            return None
 
 
 board = Board()
@@ -160,6 +188,8 @@ board.move((5, 0), (5, 3))
 board.move((5, 3), (2, 3))
 board.move((2, 3), (2, 4))
 board.move((0, 3), (1, 4))
+board.move((1, 4), (2, 5))
+
 """
 rook = board.board[2][1]
 print(rook)
