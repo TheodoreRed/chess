@@ -39,7 +39,7 @@ class Bishop(Piece):
                         if board[row - i][col - i].team != self.team:
                             legal_moves.append((row - i, col - i))
                         down_left = False
-            if row - i >= 0 and col - i >= 0:
+            if row - i >= 0 and col + i <= 7:
                 if down_right:
                     if board[row - i][col + i] == None:
                         legal_moves.append((row - i, col + i))

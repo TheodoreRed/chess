@@ -9,6 +9,41 @@ class Pawn(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.PAWN
 
+    def get_legal_moves(self, board, position):
+        legal_moves = []
+        row, col = position[0], position[1]
+        if self.team == Team.WHITE and row + 1 <= 7:
+            if board[row + 1][col] == None:
+                legal_moves.append((row + 1, col))
+                if self.first_move and row + 2 <= 7:
+                    if board[row + 2][col] == None:
+                        legal_moves.append((row + 2, col))
+            if col + 1 <= 7:
+                if board[row + 1][col + 1]:
+                    if board[row + 1][col + 1].team != self.team:
+                        legal_moves.append((row + 1, col + 1))
+            if col - 1 >= 0:
+                if board[row + 1][col - 1]:
+                    if board[row + 1][col - 1].team != self.team:
+                        legal_moves.append((row + 1, col - 1))
+
+        # black pawns go down
+        if self.team == Team.BLACK and row - 1 >= 0:
+            if board[row - 1][col] == None:
+                legal_moves.append((row - 1, col))
+                if self.first_move and row - 2 >= 0:
+                    if board[row - 2][col] == None:
+                        legal_moves.append((row - 2, col))
+            if col - 1 >= 0:
+                if board[row - 1][col - 1]:
+                    if board[row - 1][col - 1].team != self.team:
+                        legal_moves.append((row - 1, col - 1))
+            if col + 1 <= 7:
+                if board[row - 1][col + 1]:
+                    if board[row - 1][col + 1].team != self.team:
+                        legal_moves.append((row - 1, col + 1))
+        return legal_moves
+
     def move(self, board, current_pos, new_pos):
         new_row, new_col = new_pos[0], new_pos[1]
         current_row, current_col = current_pos[0], current_pos[1]

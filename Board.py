@@ -117,9 +117,15 @@ class Board:
         king_pos = self.get_kings_position(team)
         king_row = king_pos[0]
         king_col = king_pos[1]
-        # This will eventually be legal moves of a queen and Knight
-        rook = Rook(team)
-        potential_enemies = rook.get_legal_moves(self.board, (king_row, king_col))
+
+        queen = Queen(team)
+        knight = Knight(team)
+
+        potential_enemies = queen.get_legal_moves(self.board, (king_row, king_col))
+        potential_enemies.extend(
+            knight.get_legal_moves(self.board, (king_row, king_col))
+        )
+
         for position in potential_enemies:
             row, col = position[0], position[1]
             # checks if potential enemy has legal moves with kings position
@@ -188,18 +194,7 @@ class Board:
 
 board = Board()
 board.move((1, 4), (3, 4))
-board.move((6, 0), (4, 0))
-board.move((7, 0), (5, 0))
-board.move((5, 0), (5, 3))
-board.move((5, 3), (2, 3))
-board.move((2, 3), (2, 4))
-board.move((0, 3), (1, 4))
-board.move((1, 1), (2, 1))
-board.move((1, 3), (2, 3))
-bishop = board.board[0][2]
-print(bishop.get_legal_moves(board.board, (0, 2)))
-"""
-rook = board.board[2][1]
-print(rook)
-rook.get_legal_moves(board.board, (2, 1))
-"""
+board.move((0, 5), (3, 2))
+board.move((0, 3), (4, 7))
+board.move((3, 2), (6, 5))
+print(board.is_game_over())
