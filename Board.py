@@ -160,7 +160,6 @@ class Board:
                         self.display()
                         return False
             else:
-                print("Looks good! Not in check")
                 if piece.move(self.board, current_pos, new_pos):
                     self.board[current_pos[0]][current_pos[1]] = None
                     self.board[new_pos[0]][new_pos[1]] = piece
@@ -168,12 +167,12 @@ class Board:
                         self.board[current_pos[0]][current_pos[1]] = piece
                         self.board[new_pos[0]][new_pos[1]] = None
                         print("Can't move into check!")
-                        self.display()
+                        # self.display()
                         return False
                     else:
-                        self.display()
+                        # self.display()
                         return True
-            self.display()
+            # self.display()
             return False
 
     # TODO: return team of winner, or None if the game needs to continue
@@ -192,9 +191,12 @@ class Board:
             return None
 
 
+"""
 board = Board()
+print(board.move((1, 4), (3, 4)))
 board.move((1, 4), (3, 4))
 board.move((0, 5), (3, 2))
 board.move((0, 3), (4, 7))
 board.move((3, 2), (6, 5))
 print(board.is_game_over())
+"""
