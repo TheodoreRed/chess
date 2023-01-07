@@ -9,71 +9,25 @@ class Bishop(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.BISHOP
 
-    """
-    def get_legal_moves(self, board, position):
-        legal_moves = []
-        row, col = position[0], position[1]
-        up_right, up_left, down_right, down_left = True, True, True, True
-
-        for i in range(1, len(board) + 1):
-            if row + i <= 7 and col + i <= 7:
-                if up_right:
-                    if board[row + i][col + i] == None:
-                        legal_moves.append((row + i, col + i))
-                    else:
-                        if board[row + i][col + i].team != self.team:
-                            legal_moves.append((row + i, col + i))
-                        up_right = False
-            if row + i <= 7 and col - i >= 0:
-                if up_left:
-                    if board[row + i][col - i] == None:
-                        legal_moves.append((row + i, col - i))
-                    else:
-                        if board[row + i][col - i].team != self.team:
-                            legal_moves.append((row + i, col - i))
-                        up_left = False
-            if row - i >= 0 and col - i >= 0:
-                if down_left:
-                    if board[row - i][col - i] == None:
-                        legal_moves.append((row - i, col - i))
-                    else:
-                        if board[row - i][col - i].team != self.team:
-                            legal_moves.append((row - i, col - i))
-                        down_left = False
-            if row - i >= 0 and col + i <= 7:
-                if down_right:
-                    if board[row - i][col + i] == None:
-                        legal_moves.append((row - i, col + i))
-                    else:
-                        if board[row - i][col + i].team != self.team:
-                            legal_moves.append((row - i, col + i))
-                        down_right = False
-        return legal_moves
-    """
-
     def move(self, board, current_pos, new_pos):
-        new_row, new_col = new_pos[0], new_pos[1]
-        current_row, current_col = current_pos[0], current_pos[1]
+        new_row, new_col = new_pos
+        current_row, current_col = current_pos
+        
+        row_diff = abs(new_row - current_row)
+        col_diff = abs(new_col - current_col)
 
         # Checks if new_pos is a diagonal
-        # TODO: row_diff, col_diff?
-        if abs(new_row - current_row) == abs(new_col - current_col):
+        if row_diff == col_diff:
 
             row_route = 1 if new_row > current_row else -1
             col_route = 1 if new_col > current_col else -1
-            for i in range(1, abs(new_row - current_row) + 1):
+            for i in range(1, row_diff + 1):
                 row_increment = row_route * i
                 col_increment = col_route * i
-                if (board[current_row + row_increment][current_col + col_increment] != None):
-                    if (board[current_row + row_increment][current_col + col_increment].team == self.team):
+                if board[current_row + row_increment][current_col + col_increment]:
+                    if board[current_row + row_increment][current_col + col_increment].get_team() == self.get_team():
                         print("Try again: Your own piece is blocking the way.")
                         return False
-
-                    # TODO: Get rid of this else statement and the return True. Similar idea to my comment in Rook.py... we're checking to see if anything would prevent us moving
-                    # and returning false if there is. Once we've gone through all of our options without returning False, then we can finally return True and confidently say
-                    # that this move works
-                    else:
-                        return True
             return True
 
         print("Try again: Bishops can only move in a diagonal.")

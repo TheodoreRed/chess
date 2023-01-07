@@ -167,9 +167,8 @@ class Board:
             holding off on it for now
             """
 
-            # note: would it be more accurate to ask: is my team in check? (splitting hairs)
-            # Am I (piece) in check?
-            if self.in_check(piece.team):
+            # Is my team in check?
+            if self.in_check(piece.get_team()):
                 # try a move to get out and see if piece's move is legal
                 if piece.move(self.board, current_pos, new_pos):
                     # try to move it and see if my king is in check afterwards
@@ -230,14 +229,6 @@ class Board:
             return None
 
 
-"""
+
 board = Board()
 board.move((1, 4), (3, 4))
-board.move((0, 5), (3, 2))
-board.move((0, 3), (4, 7))
-board.move((3, 2), (6, 5))
-piece = board.board[3][4]
-print(piece.get_legal_moves(board.board, (3, 4)))
-print()
-print(board.is_game_over())
-"""

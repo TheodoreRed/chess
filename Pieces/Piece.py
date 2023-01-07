@@ -45,6 +45,7 @@ class Piece:
         for empty_pos in empty_positions:
             if self.move(board, current_pos, empty_pos):
                 legal_moves.append(empty_pos)
+        return legal_moves
 
     """
     note: we talked about this but as a refresher:
