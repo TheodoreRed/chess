@@ -81,13 +81,14 @@ class Game:
         return coordinates
 
     def finish_turn(self):
+        check_team = self.current_team
         self.current_team = (Team.WHITE if self.current_team == Team.BLACK else Team.BLACK)
         print("--------")
 
-        self.check_game_over()
+        self.check_game_over(check_team)
 
-    def check_game_over(self):
-        winner = self.board.is_game_over()
+    def check_game_over(self, team):
+        winner = self.board.is_game_over(team)
 
         if winner:
             self.game_over = True

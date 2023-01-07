@@ -14,50 +14,14 @@ os.system("cls")
 
 BOARD_SIZE = 8
 DEFAULT_BOARD = [
-    [
-        Rook(Team.WHITE),
-        Knight(Team.WHITE),
-        Bishop(Team.WHITE),
-        Queen(Team.WHITE),
-        King(Team.WHITE),
-        Bishop(Team.WHITE),
-        Knight(Team.WHITE),
-        Rook(Team.WHITE),
-    ],
-    [
-        Pawn(Team.WHITE),
-        Pawn(Team.WHITE),
-        Pawn(Team.WHITE),
-        Pawn(Team.WHITE),
-        Pawn(Team.WHITE),
-        Pawn(Team.WHITE),
-        Pawn(Team.WHITE),
-        Pawn(Team.WHITE),
-    ],
+    [Rook(Team.WHITE), Knight(Team.WHITE), Bishop(Team.WHITE), Queen(Team.WHITE), King(Team.WHITE), Bishop(Team.WHITE), Knight(Team.WHITE), Rook(Team.WHITE)],
+    [Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE)],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
     [None, None, None, None, None, None, None, None],
-    [
-        Pawn(Team.BLACK),
-        Pawn(Team.BLACK),
-        Pawn(Team.BLACK),
-        Pawn(Team.BLACK),
-        Pawn(Team.BLACK),
-        Pawn(Team.BLACK),
-        Pawn(Team.BLACK),
-        Pawn(Team.BLACK),
-    ],
-    [
-        Rook(Team.BLACK),
-        Knight(Team.BLACK),
-        Bishop(Team.BLACK),
-        Queen(Team.BLACK),
-        King(Team.BLACK),
-        Bishop(Team.BLACK),
-        Knight(Team.BLACK),
-        Rook(Team.BLACK),
-    ],
+    [Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK), Pawn(Team.BLACK)],
+    [Rook(Team.BLACK), Knight(Team.BLACK), Bishop(Team.BLACK), Queen(Team.BLACK), King(Team.BLACK), Bishop(Team.BLACK), Knight(Team.BLACK), Rook(Team.BLACK)],
 ]
 
 
@@ -82,80 +46,63 @@ class Board:
         if piece:
             return piece
 
-    """
-    TODO: We shouldn't actually move any pieces as the result of this function. We only want to evaluate if the game is over or not.
-    
-    So, I propose changing this method's name to is_checkmate where it returns True at the bottom of the method if all of the potential moves fail
-    to get your team out of check and it breaks early by returning False if any moves do get you out of check
-
-    If the game continues, then the player in check knows for sure they have a way to save themselves and if the game ends... GG!
-    """
-    # trys all the legal moves on a team. if it finds one that stops check returns true
-    def try_all_legal_moves(self, team):
+    # trys all the legal moves on a team. if it finds one that stops check returns False
+    def is_checkmate(self, team):
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
-                if self.board[row][col] != None:
+                if self.board[row][col]:
                     piece = self.board[row][col]
                     if piece.team == team:
                         piece_moves = piece.get_legal_moves(self.board, (row, col))
                         for move in piece_moves:
-                            # TODO: the variable move is already a tuple. no need to split it up, just pass it directly!
-                            if piece.move(self.board, (row, col), (move[0], move[1])):
+                            if piece.move(self.board, (row, col), move):
                                 self.board[row][col] = None
                                 self.board[move[0]][move[1]] = piece
-                                if self.in_check(piece.team) == False:
+                                if not self.in_check(piece.team):
                                     self.board[row][col] = piece
                                     self.board[move[0]][move[1]] = None
                                     # found a spot that would get out of check
-                                    return True
+                                    return False
                                 else:
                                     self.board[row][col] = piece
                                     self.board[move[0]][move[1]] = None
-        return False
+        return True
 
-    # TODO: generalize this to get any particular piece i.e. (get_position(self, team, rank)). might come in handy later and the code is already here
-    def get_kings_position(self, team):
+    def get_ranks_position(self, team, rank):
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
-                if self.board[row][col] != None:
-                    piece = self.board[row][col]
-                    if piece.rank == Rank.KING and piece.team == team:
-                        return (row, col)
+                if self.board[row][col]:
+                    piece = board.get_piece((row, col))
+                    if piece:
+                        if piece.rank == rank and piece.team == team:
+                            return (row, col)
 
     # check if a team is in check
     def in_check(self, team):
-        '''
-        TODO: don't forget to use tuple notation. THIS CAN BE CHANGED BASICALLY EVERYWHERE AND I SUGGEST YOU DO FOR CLEANLINESS
-
-        x, y = get_my_tuple() automatically splits the tuple apart into x and y
-        instead of x, y = my_tuple[0], my_tuple[1]
-
-        so in this case: "king_row, king_pos = self.get_kings_position(team)"
-        '''
-        king_pos = self.get_kings_position(team)
-        king_row = king_pos[0]
-        king_col = king_pos[1]
+        king_row, king_col = self.get_ranks_position(team, Rank.KING)
 
         test_queen = Queen(team)
         test_knight = Knight(team)
 
-        '''
-        note: this took me a while to figure out, probably worth commenting. I see now that: all of the potential movements of a queen/knight from the king's position would
-        include all of the enemy positions on the board that could threaten the king... a bit confusing but very clever and efficient!
-        '''
+        # get all legal moves for queen and knight from king's position  
+        # these positions represent potential enemy positions
         potential_enemies = test_queen.get_legal_moves(self.board, (king_row, king_col))
         potential_enemies.extend(test_knight.get_legal_moves(self.board, (king_row, king_col)))
-
+        print(potential_enemies)
+        # iterate over potential enemy positions
         for position in potential_enemies:
-            row, col = position[0], position[1]
-            # checks if potential enemy has legal moves with kings position
+            row, col = position
+            # if there is a piece at potential enemy position
             if self.board[row][col]:
+                # get legal moves for that piece
                 for pos in self.board[row][col].get_legal_moves(self.board, (row, col)):
+                    print(pos)
+                    # check if any legal moves are the position of the king
                     if self.board[pos[0]][pos[1]]:
-                        if self.board[pos[0]][pos[1]].rank == Rank.KING:
+                        if board.get_piece(pos).rank == Rank.KING:
                             # in check
                             return True
-
+        # if loop completes and no legal moves of potential enemies threaten king, team is not in check
         return False
 
     def move(self, current_pos, new_pos):
@@ -200,7 +147,7 @@ class Board:
                 if piece.move(self.board, current_pos, new_pos):
                     self.board[current_pos[0]][current_pos[1]] = None
                     self.board[new_pos[0]][new_pos[1]] = piece
-                    if self.in_check(piece.team):
+                    if self.in_check(piece.get_team()):
                         self.board[current_pos[0]][current_pos[1]] = piece
                         self.board[new_pos[0]][new_pos[1]] = None
                         print("Can't move into check!")
@@ -211,24 +158,17 @@ class Board:
                         return True
             return False
 
-    # TODO: return team of winner, or None if the game needs to continue
-    def is_game_over(self):
-        # TODO: DRY this shit out ;) the if and elif branches here are identical. You just need to establish team and enemy_team variables. Easy enough w/ ternary operators
-        if self.in_check(Team.WHITE):
-            if self.try_all_legal_moves(Team.WHITE):
-                return None
-            else:
-                return Team.BLACK
-        elif self.in_check(Team.BLACK):
-            if self.try_all_legal_moves(Team.BLACK):
-                return None
-            else:
-                return Team.WHITE
-        else:
-            # TODO: Get rid of this else branch. A function always returns None by default
-            return None
+    def is_game_over(self, team):
+        if self.in_check(team):
+            if self.is_checkmate(team):
+                winner = Team.BLACK if team == Team.WHITE else Team.WHITE
+                return winner
 
 
 
 board = Board()
 board.move((1, 4), (3, 4))
+board.move((0, 5), (3, 2))
+board.move((0, 3), (4, 7))
+board.move((3, 2), (6, 5))
+print(board.in_check(Team.BLACK))
