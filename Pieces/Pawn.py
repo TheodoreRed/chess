@@ -9,6 +9,7 @@ class Pawn(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.PAWN
 
+    # TODO: fix this method
     def get_legal_moves(self, board, position):
         legal_moves = []
         row, col = position[0], position[1]
@@ -62,7 +63,6 @@ class Pawn(Piece):
                     print("Try again: There is another piece blocking it's path.")
                     return False
 
-                self.first_move = False
                 if new_row > current_row and self.is_white_team():
                     return True
                 elif new_row < current_row and not self.is_white_team():
