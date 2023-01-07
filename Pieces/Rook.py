@@ -9,6 +9,7 @@ class Rook(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.ROOK
 
+    """
     def get_legal_moves(self, board, position):
         legal_moves = []
         row, col = position[0], position[1]
@@ -48,6 +49,7 @@ class Rook(Piece):
                             legal_moves.append((row - i, col))
                         move_down = False
         return legal_moves
+    """
 
     def move(self, board, current_pos, new_pos):
         new_row, new_col = new_pos[0], new_pos[1]
@@ -78,10 +80,10 @@ class Rook(Piece):
                         return False
                     else:
                         if i != new_col:
-                            print(
-                                "Try again: There is an enemy piece blocking your way."
-                            )
+                            print("Try again: There is an enemy piece blocking your way.")
                             return False
+                            
+                    # TODO: This return True shouldn't be here. Same logic as above. We only want to return False if something is blocking our path then finally return True once we know that nothing did
                     return True
             return True
 

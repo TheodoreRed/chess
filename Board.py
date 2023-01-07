@@ -82,6 +82,14 @@ class Board:
         if piece:
             return piece
 
+    """
+    TODO: We shouldn't actually move any pieces as the result of this function. We only want to evaluate if the game is over or not.
+    
+    So, I propose changing this method's name to is_checkmate where it returns True at the bottom of the method if all of the potential moves fail
+    to get your team out of check and it breaks early by returning False if any moves do get you out of check
+
+    If the game continues, then the player in check knows for sure they have a way to save themselves and if the game ends... GG!
+    """
     # trys all the legal moves on a team. if it finds one that stops check returns true
     def try_all_legal_moves(self, team):
         for row in range(BOARD_SIZE):
@@ -91,6 +99,7 @@ class Board:
                     if piece.team == team:
                         piece_moves = piece.get_legal_moves(self.board, (row, col))
                         for move in piece_moves:
+                            # TODO: the variable move is already a tuple. no need to split it up, just pass it directly!
                             if piece.move(self.board, (row, col), (move[0], move[1])):
                                 self.board[row][col] = None
                                 self.board[move[0]][move[1]] = piece
@@ -104,6 +113,7 @@ class Board:
                                     self.board[move[0]][move[1]] = None
         return False
 
+    # TODO: generalize this to get any particular piece i.e. (get_position(self, team, rank)). might come in handy later and the code is already here
     def get_kings_position(self, team):
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
@@ -114,17 +124,27 @@ class Board:
 
     # check if a team is in check
     def in_check(self, team):
+        '''
+        TODO: don't forget to use tuple notation. THIS CAN BE CHANGED BASICALLY EVERYWHERE AND I SUGGEST YOU DO FOR CLEANLINESS
+
+        x, y = get_my_tuple() automatically splits the tuple apart into x and y
+        instead of x, y = my_tuple[0], my_tuple[1]
+
+        so in this case: "king_row, king_pos = self.get_kings_position(team)"
+        '''
         king_pos = self.get_kings_position(team)
         king_row = king_pos[0]
         king_col = king_pos[1]
 
-        queen = Queen(team)
-        knight = Knight(team)
+        test_queen = Queen(team)
+        test_knight = Knight(team)
 
-        potential_enemies = queen.get_legal_moves(self.board, (king_row, king_col))
-        potential_enemies.extend(
-            knight.get_legal_moves(self.board, (king_row, king_col))
-        )
+        '''
+        note: this took me a while to figure out, probably worth commenting. I see now that: all of the potential movements of a queen/knight from the king's position would
+        include all of the enemy positions on the board that could threaten the king... a bit confusing but very clever and efficient!
+        '''
+        potential_enemies = test_queen.get_legal_moves(self.board, (king_row, king_col))
+        potential_enemies.extend(test_knight.get_legal_moves(self.board, (king_row, king_col)))
 
         for position in potential_enemies:
             row, col = position[0], position[1]
@@ -135,6 +155,7 @@ class Board:
                         if self.board[pos[0]][pos[1]].rank == Rank.KING:
                             # in check
                             return True
+
         return False
 
     def move(self, current_pos, new_pos):
@@ -145,11 +166,29 @@ class Board:
             to have a reference to the board object instead of the board array in each piece. This will be a big re-factor, so I'm
             holding off on it for now
             """
-            # Am I(piece) in check?
+
+            # note: would it be more accurate to ask: is my team in check? (splitting hairs)
+            # Am I (piece) in check?
             if self.in_check(piece.team):
                 # try a move to get out and see if piece's move is legal
                 if piece.move(self.board, current_pos, new_pos):
                     # try to move it and see if my king is in check afterwards
+                    '''
+                    TODO: This logic about: am i in check -> try to move out -> still in check: is all sound and well written. Only problem is that it isn't very DRY.
+                    I think a good re-factor would be a method like: Board::take_piece(current_pos, new_pos) that does this piece of 2-line logic
+
+                    And later when you undo the switch because they're still in check, just use the same method with reversed parameters
+
+                    If it seems like overkill, just think about how literal this function would become to read:
+                        if in_check:
+                            try_to_move():
+                                take_piece()
+                                if in_check:
+                                    take_piece()
+                                    return
+                    
+                    Python really is the GOAT of readability (if you move all of your logic out into indivdual methods)
+                    '''
                     self.board[current_pos[0]][current_pos[1]] = None
                     self.board[new_pos[0]][new_pos[1]] = piece
                     if self.in_check(piece.team):
@@ -177,6 +216,7 @@ class Board:
 
     # TODO: return team of winner, or None if the game needs to continue
     def is_game_over(self):
+        # TODO: DRY this shit out ;) the if and elif branches here are identical. You just need to establish team and enemy_team variables. Easy enough w/ ternary operators
         if self.in_check(Team.WHITE):
             if self.try_all_legal_moves(Team.WHITE):
                 return None
@@ -188,6 +228,7 @@ class Board:
             else:
                 return Team.WHITE
         else:
+            # TODO: Get rid of this else branch. A function always returns None by default
             return None
 
 

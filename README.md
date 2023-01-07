@@ -5,7 +5,6 @@
 - Python
 
 ## Install and Run on Local Device
-[comment]: <> (note: why explain with words when code do trick)
 ```
 pip install -r requirements.txt
 python3 -m pytest -s

@@ -9,6 +9,7 @@ class Bishop(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.BISHOP
 
+    """
     def get_legal_moves(self, board, position):
         legal_moves = []
         row, col = position[0], position[1]
@@ -48,12 +49,14 @@ class Bishop(Piece):
                             legal_moves.append((row - i, col + i))
                         down_right = False
         return legal_moves
+    """
 
     def move(self, board, current_pos, new_pos):
         new_row, new_col = new_pos[0], new_pos[1]
         current_row, current_col = current_pos[0], current_pos[1]
 
         # Checks if new_pos is a diagonal
+        # TODO: row_diff, col_diff?
         if abs(new_row - current_row) == abs(new_col - current_col):
 
             row_route = 1 if new_row > current_row else -1
@@ -61,20 +64,17 @@ class Bishop(Piece):
             for i in range(1, abs(new_row - current_row) + 1):
                 row_increment = row_route * i
                 col_increment = col_route * i
-                if (
-                    board[current_row + row_increment][current_col + col_increment]
-                    != None
-                ):
-                    if (
-                        board[current_row + row_increment][
-                            current_col + col_increment
-                        ].team
-                        == self.team
-                    ):
+                if (board[current_row + row_increment][current_col + col_increment] != None):
+                    if (board[current_row + row_increment][current_col + col_increment].team == self.team):
                         print("Try again: Your own piece is blocking the way.")
                         return False
+
+                    # TODO: Get rid of this else statement and the return True. Similar idea to my comment in Rook.py... we're checking to see if anything would prevent us moving
+                    # and returning false if there is. Once we've gone through all of our options without returning False, then we can finally return True and confidently say
+                    # that this move works
                     else:
                         return True
             return True
+
         print("Try again: Bishops can only move in a diagonal.")
         return False
