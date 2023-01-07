@@ -9,6 +9,7 @@ class King(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.KING
 
+    """
     def get_legal_moves(self, board, position):
         legal_moves = []
         row, col = position[0], position[1]
@@ -27,6 +28,7 @@ class King(Piece):
                     else:
                         legal_moves.append((test_row, test_col))
         return legal_moves
+    """
 
     def move(self, board, current_pos, new_pos):
         new_row, new_col = new_pos[0], new_pos[1]
@@ -34,8 +36,16 @@ class King(Piece):
 
         # King can only move one
         if abs(current_row - new_row) > 1 or abs(current_col - new_col) > 1:
-            print("Can't move there!")
+            print("Try again: Kings can only move one space at a time.")
             return False
+
+        """
+        TODO: you'll need to check that this move doesn't place the King in check. You already wrote the in_check() logic inside of Board.py but it makes sense
+        to associate that with the King exclusively because it only really concerns the king.
+
+        So here's the strategy: move in_check() here to the King class. And change the call site inside of Board.py to use it as such i.e. "if king.in_check()".
+        Then also use it here inside of King::move() to decide if a move is legal in the same way that you wanted to do originally with the code below
+        """
 
         """
         note: commenting this out for now. it'll be easiest to write this as "hey board... would a move to new_pos put me in check?"
@@ -64,6 +74,7 @@ class King(Piece):
         # Attacking
         if board[new_row][new_col] != None:
             if board[new_row][new_col].team == self.team:
-                print("Same team")
+                print("Try again: Your own piece is blocking the way.")
                 return False
+
         return True
