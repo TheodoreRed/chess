@@ -72,7 +72,7 @@ class Board:
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
                 if self.board[row][col]:
-                    piece = board.get_piece((row, col))
+                    piece = self.get_piece((row, col))
                     if piece:
                         if piece.rank == rank and piece.team == team:
                             return (row, col)
@@ -96,10 +96,9 @@ class Board:
             if self.board[row][col]:
                 # get legal moves for that piece
                 for pos in self.board[row][col].get_legal_moves(self.board, (row, col)):
-                    print(pos)
                     # check if any legal moves are the position of the king
                     if self.board[pos[0]][pos[1]]:
-                        if board.get_piece(pos).rank == Rank.KING:
+                        if self.get_piece(pos).rank == Rank.KING:
                             # in check
                             return True
         # if loop completes and no legal moves of potential enemies threaten king, team is not in check
@@ -171,4 +170,4 @@ board.move((1, 4), (3, 4))
 board.move((0, 5), (3, 2))
 board.move((0, 3), (4, 7))
 board.move((3, 2), (6, 5))
-print(board.in_check(Team.BLACK))
+print(board.is_game_over(Team.BLACK))

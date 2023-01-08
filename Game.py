@@ -85,7 +85,7 @@ class Game:
         self.current_team = (Team.WHITE if self.current_team == Team.BLACK else Team.BLACK)
         print("--------")
 
-        self.check_game_over(check_team)
+        self.check_game_over(self.current_team)
 
     def check_game_over(self, team):
         winner = self.board.is_game_over(team)

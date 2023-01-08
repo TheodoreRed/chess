@@ -40,6 +40,8 @@ class Piece:
             for col in range(len(board)):
                 if not board[row][col]:
                     empty_positions.append((row, col))
+                elif board[row][col].get_team() != self.get_team():
+                    empty_positions.append((row, col))
         
         legal_moves = []
         for empty_pos in empty_positions:
