@@ -9,7 +9,7 @@ class Rook(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.ROOK
 
-    def move(self, board, current_pos, new_pos):
+    def move(self, board, current_pos, new_pos, testing=False):
         new_row, new_col = new_pos
         current_row, current_col = current_pos
 
@@ -20,10 +20,10 @@ class Rook(Piece):
             for i in range(current_row + route, new_row + route, route):
                 if board[i][new_col]:
                     if board[i][new_col].get_team() is self.get_team():
-                        print("Try again: Your own piece is blocking the way.")
+                        not testing and print("Try again: Your own piece is blocking the way.")
                         return False
                     elif i != new_row:
-                        print("Try again: There is an enemy piece blocking your way.")
+                        not testing and print("Try again: There is an enemy piece blocking your way.")
                         return False
             return True
 
@@ -34,13 +34,13 @@ class Rook(Piece):
             for i in range(current_col + route, new_col + route, route):
                 if board[new_row][i]:
                     if board[new_row][i].get_team() is self.get_team():
-                        print("Try again: Your own piece is blocking the way.")
+                        not testing and print("Try again: Your own piece is blocking the way.")
                         return False
                     else:
                         if i != new_col:
-                            print("Try again: There is an enemy piece blocking your way.")
+                            not testing and print("Try again: There is an enemy piece blocking your way.")
                             return False
             return True
 
-        print("Try again: Rooks can only move along ranks and files, not diagonals.")
+        not testing and print("Try again: Rooks can only move along ranks and files, not diagonals.")
         return False

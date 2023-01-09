@@ -1,5 +1,12 @@
+import os
+
+from Banners import Banners
 from Board import Board
 from Pieces.Piece import Team
+
+
+os.system("cls")
+# os.system("mode 100,20")
 
 
 LETTER_TO_COL = {"a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f": 5, "g": 6, "h": 7}
@@ -7,6 +14,9 @@ LETTER_TO_COL = {"a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f": 5, "g": 6, "h": 7}
 
 class Game:
     def __init__(self):
+        self.banners = Banners()
+        self.banners.print_welcome_banner()
+
         self.board = Board()
         self.current_team = Team.WHITE
         self.game_over = False
@@ -81,7 +91,6 @@ class Game:
         return coordinates
 
     def finish_turn(self):
-        check_team = self.current_team
         self.current_team = (Team.WHITE if self.current_team == Team.BLACK else Team.BLACK)
         print("--------")
 

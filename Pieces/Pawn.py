@@ -9,7 +9,7 @@ class Pawn(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.PAWN
 
-    def move(self, board, current_pos, new_pos):
+    def move(self, board, current_pos, new_pos, testing=False):
         new_row, new_col = new_pos
         current_row, current_col = current_pos
 
@@ -22,7 +22,7 @@ class Pawn(Piece):
             if row_diff <= moves_allowed:
                 route = 1 if new_row > current_row else -1
                 if (board[new_row][new_col] or board[current_row + route][current_col]):
-                    print("Try again: Your own piece is blocking the way.")
+                    not testing and print("Try again: Your own piece is blocking the way.")
                     return False
 
                 if new_row > current_row and self.is_white_team():
@@ -38,5 +38,5 @@ class Pawn(Piece):
                     elif new_row < current_row and not self.is_white_team():
                         return True
 
-        print("Try again: Pawns can only move two squares on their first move, and one square on all other moves. Move diagonal to attack.")
+        not testing and print("Try again: Pawns can only move two squares on their first move, and one square on all other moves. Move diagonal to attack.")
         return False

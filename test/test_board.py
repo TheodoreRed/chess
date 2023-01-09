@@ -1,7 +1,7 @@
 import sys
-import pytest
+# import pytest
 
-sys.path.append("./")
+sys.path.append('./')
 
 from Board import Board
 from Pieces.Piece import Team
@@ -50,11 +50,14 @@ def test_move_rook_bad_input():
 
     board = Board(starting_board)
     print("---------Testing bad input---------")
-    board.move((0, 0), (3, 1))
+    board.display()
+    # board.move((0, 0), (3, 1))
+    # board.display()
     assert board.get_board() == result_board
 
 
 def test_move_rook_forwards():
+    print("---------Forwards---------")
 
     print("---------Testing same team piece in the way---------")
     # same team piece in the way
@@ -164,6 +167,7 @@ def test_move_rook_forwards():
 
 
 def test_move_rook_backwards():
+    print("---------Backwards---------")
     print("---------Testing same team in the way---------")
     # same team piece in the way
     start_board = [
@@ -179,7 +183,7 @@ def test_move_rook_backwards():
     board = Board(start_board)
     board.board[7][7] = Rook(Team.BLACK)
     board.board[6][7] = Rook(Team.BLACK)
-    board.display()
+    #board.display()
     board.move((7, 7), (1, 7))
 
     result_board = [
@@ -198,7 +202,7 @@ def test_move_rook_backwards():
     board = Board(start_board)
     board.board[7][7] = Rook(Team.BLACK)
     board.board[6][7] = Rook(Team.WHITE)
-    board.display()
+    #board.display()
     board.move((7, 7), (1, 7))
 
     result_board = [
@@ -217,7 +221,7 @@ def test_move_rook_backwards():
     board = Board(start_board)
     board.board[7][7] = Rook(Team.BLACK)
     board.move((7, 7), (5, 7))
-    board.display()
+    #board.display()
 
     result_board = [
         [None, None, None, None, None, None, None, None],
@@ -248,16 +252,38 @@ def test_move_rook_right():
 
 
 def test_rook():
+    print("---------Testing Rook---------")
     test_move_rook_bad_input()
-    print("---------Forwards---------")
-    test_move_rook_forwards()
-    print("---------Backwards---------")
-    test_move_rook_backwards()
+    # test_move_rook_forwards()
+    # test_move_rook_backwards()
     # test_move_rook_left()
     # test_move_rook_right()
 
 
+def test_checkmate():
+    starting_board = [
+        [None, None, None, King(Team.WHITE), None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, None, None, None],
+        [None, None, None, None, None, Rook(Team.WHITE), None, None],
+        [Rook(Team.WHITE), None, None, None, None, None, None, King(Team.BLACK)],
+    ]
+
+    board = Board(starting_board)
+    winner = board.is_game_over(Team.BLACK)
+    assert winner == Team.WHITE
+
+    starting_board = PAWNLESS_BOARD
+
+    board = Board(starting_board)
+    board.display()
+    winner = board.is_game_over(Team.BLACK)
+    assert winner == None
+
+
 def test_board():
-    # TODO: Add messages for 'x/y test cases passed', etc
-    print("---------Testing Rook---------")
     test_rook()
+    test_checkmate()

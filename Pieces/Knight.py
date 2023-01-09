@@ -9,7 +9,7 @@ class Knight(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.KNIGHT
 
-    def move(self, board, current_pos, new_pos):
+    def move(self, board, current_pos, new_pos, testing=False):
         new_row, new_col = new_pos
         current_row, current_col = current_pos
 
@@ -20,7 +20,7 @@ class Knight(Piece):
         if (row_diff == 1 and col_diff == 2) or (row_diff == 2 and col_diff == 1):
             piece = board[new_row][new_col]
             if piece and piece.team == self.team:
-                print("Try again: Your own piece is blocking the way.")
+                not testing and print("Try again: Your own piece is blocking the way.")
                 return False
             
             # knights can skip over pieces, so the only thing ever preventing a knight from moving is their own team's piece being in the way

@@ -1,6 +1,6 @@
-import os
 from copy import deepcopy
 
+from GUI import GUI
 from Pieces.Piece import Team, Rank
 from Pieces.Rook import Rook
 from Pieces.Bishop import Bishop
@@ -9,10 +9,8 @@ from Pieces.Queen import Queen
 from Pieces.King import King
 from Pieces.Knight import Knight
 
-os.system("cls")
-
-
 BOARD_SIZE = 8
+
 DEFAULT_BOARD = [
     [Rook(Team.WHITE), Knight(Team.WHITE), Bishop(Team.WHITE), Queen(Team.WHITE), King(Team.WHITE), Bishop(Team.WHITE), Knight(Team.WHITE), Rook(Team.WHITE)],
     [Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE), Pawn(Team.WHITE)],
@@ -29,53 +27,64 @@ class Board:
     def __init__(self, starting_board=DEFAULT_BOARD):
         self.board = []
         self.populate_board(starting_board)
+        self.gui = GUI()
 
     def populate_board(self, starting_board):
         self.board = deepcopy(starting_board)
 
     def display(self):
+        """
         print("---------------------------")
         for row in reversed(range(len(self.board))):
             print(self.board[row])
+
+        print("---------------------------")   
+        """
+        self.gui.draw_board(self.board)
 
     def get_board(self):
         return self.board
 
     def get_piece(self, pos):
-        piece = self.board[pos[0]][pos[1]]
-        if piece:
-            return piece
+        return self.board[pos[0]][pos[1]]
+    
+    # note: just adding this method for readability
+    def attack_position(self, current_pos, new_pos, attacking_piece):
+        current_row, current_col = current_pos
+        new_row, new_col = new_pos
 
-    # trys all the legal moves on a team. if it finds one that stops check returns False
+        self.board[current_row][current_col] = None
+        self.board[new_row][new_col] = attacking_piece
+
+    # tries all the legal moves on a team. if it finds one that stops check returns False
     def is_checkmate(self, team):
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
-                if self.board[row][col]:
-                    piece = self.board[row][col]
-                    if piece.team == team:
-                        piece_moves = piece.get_legal_moves(self.board, (row, col))
-                        for move in piece_moves:
-                            if piece.move(self.board, (row, col), move):
-                                self.board[row][col] = None
-                                self.board[move[0]][move[1]] = piece
-                                if not self.in_check(piece.team):
-                                    self.board[row][col] = piece
-                                    self.board[move[0]][move[1]] = None
-                                    # found a spot that would get out of check
-                                    return False
-                                else:
-                                    self.board[row][col] = piece
-                                    self.board[move[0]][move[1]] = None
+                piece = self.board[row][col]
+                piece_pos = (row, col)
+
+                if piece and piece.team == team:
+                    piece_moves = piece.get_legal_moves(self.board, piece_pos)
+                    # note: no need to check piece.move() because we already know this move is legal
+                    for move in piece_moves:
+                        # only changing board state to re-evaluate check. always revert board state below
+                        self.attack_position(piece_pos, move, piece)
+
+                        if not self.in_check(piece.team):
+                            # found a spot that would get out of check
+                            self.attack_position(move, piece_pos, piece)
+                            return False
+                        else:
+                            self.attack_position(move, piece_pos, piece)
+
         return True
 
     def get_ranks_position(self, team, rank):
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
-                if self.board[row][col]:
-                    piece = self.get_piece((row, col))
-                    if piece:
-                        if piece.rank == rank and piece.team == team:
-                            return (row, col)
+                piece = self.get_piece((row, col))
+                if piece and piece.rank == rank and piece.team == team:
+                        return (row, col)
 
     # check if a team is in check
     def in_check(self, team):
@@ -88,7 +97,9 @@ class Board:
         # these positions represent potential enemy positions
         potential_enemies = test_queen.get_legal_moves(self.board, (king_row, king_col))
         potential_enemies.extend(test_knight.get_legal_moves(self.board, (king_row, king_col)))
-        print(potential_enemies)
+
+        # print(potential_enemies)
+
         # iterate over potential enemy positions
         for position in potential_enemies:
             row, col = position
@@ -106,68 +117,40 @@ class Board:
 
     def move(self, current_pos, new_pos):
         piece = self.get_piece(current_pos)
-        if piece:
-            """
-            TODO: (for me) change how we get a reference to board inside of each piece instance. It will be better (and cleaner)
-            to have a reference to the board object instead of the board array in each piece. This will be a big re-factor, so I'm
-            holding off on it for now
-            """
 
-            # Is my team in check?
-            if self.in_check(piece.get_team()):
-                # try a move to get out and see if piece's move is legal
-                if piece.move(self.board, current_pos, new_pos):
-                    # try to move it and see if my king is in check afterwards
-                    '''
-                    TODO: This logic about: am i in check -> try to move out -> still in check: is all sound and well written. Only problem is that it isn't very DRY.
-                    I think a good re-factor would be a method like: Board::take_piece(current_pos, new_pos) that does this piece of 2-line logic
-
-                    And later when you undo the switch because they're still in check, just use the same method with reversed parameters
-
-                    If it seems like overkill, just think about how literal this function would become to read:
-                        if in_check:
-                            try_to_move():
-                                take_piece()
-                                if in_check:
-                                    take_piece()
-                                    return
-                    
-                    Python really is the GOAT of readability (if you move all of your logic out into indivdual methods)
-                    '''
-                    self.board[current_pos[0]][current_pos[1]] = None
-                    self.board[new_pos[0]][new_pos[1]] = piece
-                    if self.in_check(piece.team):
-                        # if I'm still in check after the switch, undo it return False
-                        self.board[current_pos[0]][current_pos[1]] = piece
-                        self.board[new_pos[0]][new_pos[1]] = None
-                        print("Still in check")
-                        return False
-            else:
-                if piece.move(self.board, current_pos, new_pos):
-                    self.board[current_pos[0]][current_pos[1]] = None
-                    self.board[new_pos[0]][new_pos[1]] = piece
-                    if self.in_check(piece.get_team()):
-                        self.board[current_pos[0]][current_pos[1]] = piece
-                        self.board[new_pos[0]][new_pos[1]] = None
-                        print("Can't move into check!")
-                        return False
-                    else:
-                        self.display()
-                        piece.first_move = False
-                        return True
+        if not piece:
             return False
+        
+        team_in_check = self.in_check(piece.get_team())
+        if team_in_check:
+            print("You're in check!")
+
+        if piece.move(self.board, current_pos, new_pos):
+            self.attack_position(current_pos, new_pos, piece)
+
+            if self.in_check(piece.get_team()):
+                self.attack_position(new_pos, current_pos, piece)
+                print("Try again: you can't move into check!" if not team_in_check else "Try again: you're still in check!")
+                return False
+            else:
+                self.display()
+                piece.first_move = False
+                return True
+
+        return False
 
     def is_game_over(self, team):
-        if self.in_check(team):
-            if self.is_checkmate(team):
-                winner = Team.BLACK if team == Team.WHITE else Team.WHITE
-                return winner
+        team_in_check = self.in_check(team)
 
+        if self.is_checkmate(team):
+            winner = Team.BLACK if team == Team.WHITE else Team.WHITE
+            return winner
 
-
+"""
 board = Board()
 board.move((1, 4), (3, 4))
 board.move((0, 5), (3, 2))
 board.move((0, 3), (4, 7))
 board.move((3, 2), (6, 5))
 print(board.is_game_over(Team.BLACK))
+"""

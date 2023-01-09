@@ -9,7 +9,7 @@ class Bishop(Piece):
         Piece.__init__(self, team)
         self.rank = Rank.BISHOP
 
-    def move(self, board, current_pos, new_pos):
+    def move(self, board, current_pos, new_pos, testing=False):
         new_row, new_col = new_pos
         current_row, current_col = current_pos
         
@@ -26,9 +26,9 @@ class Bishop(Piece):
                 col_increment = col_route * i
                 if board[current_row + row_increment][current_col + col_increment]:
                     if board[current_row + row_increment][current_col + col_increment].get_team() == self.get_team():
-                        print("Try again: Your own piece is blocking the way.")
+                        not testing and print("Try again: Your own piece is blocking the way.")
                         return False
             return True
 
-        print("Try again: Bishops can only move in a diagonal.")
+        not testing and print("Try again: Bishops can only move in a diagonal.")
         return False

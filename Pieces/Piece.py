@@ -21,18 +21,15 @@ class Piece:
         self.team = team
         self.first_move = True
 
-    # note: good practice to keep the data members of a class hidden and only read/write to them via methods (i.e. getters/setters)
     def get_team(self):
         return self.team
+    
+    def get_rank(self):
+        return self.rank
 
     def is_white_team(self):
         return self.team == Team.WHITE
 
-    """
-    note: I regret to inform you: this is probably the cleanest way to write this function. Sorry you wrote a specific implementation for each piece.
-    This is probably a bit less efficient but I feel confident that the move() method of each piece fails quickly if the move is impossible
-    (like if a rook move isn't straight, or a bishop move isn't diagonal, etc)
-    """
     def get_legal_moves(self, board, current_pos):
         empty_positions = []
 
@@ -45,8 +42,9 @@ class Piece:
         
         legal_moves = []
         for empty_pos in empty_positions:
-            if self.move(board, current_pos, empty_pos):
+            if self.move(board, current_pos, empty_pos, True):
                 legal_moves.append(empty_pos)
+
         return legal_moves
 
     """
