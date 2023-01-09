@@ -140,17 +140,15 @@ class Board:
         return False
 
     def is_game_over(self, team):
-        team_in_check = self.in_check(team)
+        if self.in_check(team):
+            if self.is_checkmate(team):
+                winner = Team.BLACK if team == Team.WHITE else Team.WHITE
+                return winner
 
-        if self.is_checkmate(team):
-            winner = Team.BLACK if team == Team.WHITE else Team.WHITE
-            return winner
 
-"""
 board = Board()
 board.move((1, 4), (3, 4))
 board.move((0, 5), (3, 2))
 board.move((0, 3), (4, 7))
 board.move((3, 2), (6, 5))
 print(board.is_game_over(Team.BLACK))
-"""
